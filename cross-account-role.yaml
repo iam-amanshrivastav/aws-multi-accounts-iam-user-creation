@@ -32,3 +32,8 @@ Resources:
                   - s3:GetObject
                   - s3:ListBucket
                 Resource: "*"
+Outputs:
+  RoleArn:
+    Description: "ARN of role Primary account will assume"
+    Value: !GetAtt CloudOpsRole.Arn
+

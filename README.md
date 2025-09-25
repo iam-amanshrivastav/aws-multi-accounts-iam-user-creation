@@ -4,9 +4,11 @@
 
 This solution enables centralized IAM user creation across **100+ independent AWS accounts** using a **parent account**. It leverages **AWS Lambda**, **AWS CFT** **STS AssumeRole**, and **S3 logging** to provision IAM users with EC2 and CloudWatch access in each child account, while maintaining a secure and auditable log of operations.
 
-> ✅ This solution does **not** require AWS Organizations. It works across **multiple standalone AWS accounts**.
+
+> ✅ This solution does **not** require AWS Organizations considring multiple applications which doesn't want central billing. It works across **multiple standalone AWS accounts**.
 
 ---
+
 ##  Architecture
 
 ###  Child Accounts (Secondary accounts)
@@ -15,10 +17,13 @@ This solution enables centralized IAM user creation across **100+ independent AW
 - **IAM Role**: Trusted by the parent account to allow `sts:AssumeRole`.
 - **Permissions**: Allows creation of IAM users and attachment of EC2 and CloudWatch policies.
 
+
 ---
 
 
+
 ###  Parent Account (Master Account)
+
 - **Lambda Function**: Orchestrates IAM user creation across child accounts.
 - **S3 Bucket**: Stores logs with:
   - `Account ID`
@@ -26,6 +31,7 @@ This solution enables centralized IAM user creation across **100+ independent AW
   - `Temporary Password`
   - `Creation Status` (`Created`, `Exists`, `Failed`)
 - **STS AssumeRole**: Uses `sts:AssumeRole` to gain temporary access to child accounts.
+
 
 ## ⚙️ Workflow
 
@@ -37,7 +43,9 @@ This solution enables centralized IAM user creation across **100+ independent AW
    - If creation fails → log `Failed`
 4. **Log to S3**: All outcomes are stored in a centralized S3 bucket for audit and tracking.
 
+
 ---
+
 
 ## Security Considerations
 
@@ -46,12 +54,18 @@ This solution enables centralized IAM user creation across **100+ independent AW
 -  Lambda should validate inputs and sanitize usernames.
 -  Temporary credentials from STS should be short-lived and scoped.
 
+---
+
+
 ## Use Cases
 
 - **DevOps Onboarding** : Provision EC2 and monitoring access for new engineers across accounts.
 - **Security Isolation** : Maintain separate AWS accounts while managing users centrally.
 - **Audit & Compliance** : Track user creation status and credentials in a secure S3 bucket.
 - **Automation** : Reduce manual IAM provisioning across accounts with a single Lambda trigger.
+
+---
+
 
 ## What This Solution Achieves
 
@@ -60,5 +74,8 @@ This solution enables centralized IAM user creation across **100+ independent AW
 -  Automated assignment of EC2 and CloudWatch access
 -  Scalable and organization-independent architecture
 -  Reduced operational overhead and human error
+
+---
+
 
 ## Last thing which I want to say Keep Working on Yourself.

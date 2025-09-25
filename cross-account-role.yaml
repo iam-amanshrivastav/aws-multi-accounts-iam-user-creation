@@ -1,0 +1,34 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: IAM Role for Parent Account to manage IAM users in child account
+
+Resources:
+  CloudOpsRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: CloudOpsRole
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: arn:aws:iam::XXXXXXX1234:root  # Parent Account ID
+            Action: sts:AssumeRole
+      Path: "/"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonEC2FullAccess
+        - arn:aws:iam::aws:policy/CloudWatchFullAccess
+      Policies:
+        - PolicyName: CloudOpsCustomPermissions
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - iam:CreateUser
+                  - iam:AttachUserPolicy
+                  - iam:CreateLoginProfile
+                  - iam:GetUser
+                  - s3:PutObject
+                  - s3:GetObject
+                  - s3:ListBucket
+                Resource: "*"
